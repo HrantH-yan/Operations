@@ -23,7 +23,7 @@ int main()
             break;
         }
 
-        if ((!isdigit(sym) && (check ^ 1)) || ((sym != '*' && sym != '+') && (check ^ 0)))  
+        if ((!isdigit(sym) && (check == 0)) || ((sym != '*' && sym != '+') && (check == 1)))  
         // checking if the input is correct and filling Elements stack with expression
         {                                                                              
             std::cout<<"Incorrect input: it shoud be like 1+2*6*9+4...= ";
