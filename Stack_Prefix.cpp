@@ -30,47 +30,73 @@ int main()
     }
 
     while (!Elements.empty())              // Filling Prefix stack with prefix expression
-    {                                      // (from right to left) ignoring '+'-es
-        if(isdigit(Elements.top()))        // becouse if it's not '*' then it's '+'
-        {                                  // 1+2*3+4*5*6 (++1*2 3*4*5 6)-->(6 5*4*3 2*1)
+    {                                     
+        if(isdigit(Elements.top()))        
+        {                                  
             Prefix.push(Elements.top());    
             Elements.pop();
         }
         else if(Elements.top() == '+')
         {
             Elements.pop();
+            Prefix.push(Elements.top());
+            Prefix.push('+');
+            Elements.pop();
         }
         else if (Elements.top() == '*')
         {
-            Elements.pop();
-            Prefix.push(Elements.top());
-            Prefix.push('*');
-            Elements.pop();
+            if (Prefix.top() == '+')
+            {
+                Prefix.pop();
+                Elements.pop();
+                Prefix.push(Elements.top());
+                Prefix.push('*');
+                Prefix.push('+');
+                Elements.pop();                
+            }
+            else //if(!isdigit(Prefix.top()))
+            {
+                Elements.pop();
+                Prefix.push(Elements.top());
+                Prefix.push('*');
+                Elements.pop();
+            }
+
         }
     }
-    
-    int temp;    // for multiplication
+
+    std::cout<<"Prefix Representation:  ";  //Calculate and print prefix expression
+    int temp;    // for multiplication          
     while(!Prefix.empty())
     {
+        if (Prefix.top() == '+')
+        {
+            std::cout<<Prefix.top();
+            Prefix.pop();
+        }
         if (Prefix.top() == '*')
         {
             temp = 1;
             while (Prefix.top() == '*') 
             {
+                std::cout<<Prefix.top();
                 Prefix.pop();
-                temp = temp * (Prefix.top() ^ 48);
+                temp = temp * (Prefix.top() ^ 0b110000);
+                std::cout<<Prefix.top();
                 Prefix.pop();
             }
-            ans = ans + temp * (Prefix.top() ^ 48);
+            ans = ans + temp * (Prefix.top() ^ 0b110000);
+            std::cout<<Prefix.top();
             Prefix.pop();
         }
         else
         {
-            ans = ans + (Prefix.top() ^ 48);
+            ans = ans + (Prefix.top() ^ 0b110000);
+            std::cout<<Prefix.top();
             Prefix.pop();
         }
     }
     
-    std::cout<<"Equal to "<<ans<<'\n';
+    std::cout<<"\n="<<ans<<'\n';
     return 0;
 }
